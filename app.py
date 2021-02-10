@@ -76,7 +76,22 @@ def plot_graphs(df):
     st.pyplot(fig)
 
 
-
+def plot_forecst(df):
+    df['date']=pd.to_datetime(df['date'])
+    df['kurs']=pd.to_numeric(df['kurs'])
+    df=df.rename(columns={'date':'ds','kurs':'y'})
+    df=df[['ds','y']]
+    time_days=300
+    model=Prophet()
+    model.fit(df) 
+    future = model.make_future_dataframe(periods=time_days) 
+    forecast = model.predict(future)
+    fig1 = model.plot(forecast)
+    plt.xlabel('Date')
+    plt.ylabel('price')
+    st.pyplot(fig1)
+    
+    
 
 
 user_input = st.text_input("Stock symbol, for example for Apple insert AAPL - check out https://de.finance.yahoo.com", 'AAPL')
@@ -120,6 +135,7 @@ components.html(
     
 
 
+    
 
 if hist.empty == True:
     st.markdown('some problem occured: stock not found or date in future - pls. check https://de.finance.yahoo.com for available stocks')
@@ -147,6 +163,9 @@ else:
     
     
     plot_graphs(df)
+    st.header('Forecast of stock')
+    st.markdown('Disclaimer: This is only a possibility of the future time series')
+    plot_forecst(df)
 
 
 
