@@ -14,7 +14,7 @@ import seaborn as sb
 from datetime import date
 import pandas as pd
 import matplotlib
-
+from fbprophet import Prophet
 
 
 st.title('What if....you invested monthly in Apple for 5 years ?')
